@@ -2,9 +2,80 @@ rsyslog Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the rsyslog cookbook.
 
+v.2.2.0 (2015-10-05)
+----------
+- Add why-run support to the file_input LWRP
+- Added support for rsyslog under systemd on Ubuntu 15.04+
+- Added new attribute node['rsyslog']['custom_remote'].  See readme for additional information
+- Added source_url and issues_url metadata for Supermarket
+- Fixed 49-relp.conf to honor logs_to_forward so it didn't just forward everything
+- Updated contributing and testing docs
+- Set the minimum supported Chef release to 11.0
+- Added maintainers.toml and maintainers.md files
+- Added Amazon Linux, Oracle, and Scientific Linux to the metadata
+- Removed all pre-Ruby 1.9 hash rockets
+- Updated development dependencies in the
+- Fix a bad example attribute in the readme
+- Updated Travis CI config to test on all modern Ruby releases
 
+v.2.1.0 (2015-07-22)
+----------
+- Fixed minor markdown errors in the readme
+- Allow the server to listen on both TCP and UDP.  For both set node['rsyslog']['protocol'] to 'udptcp'
+- Move the include for /etc/rsyslog.d/ to the very end of the rsyslog.conf config
+- Added the ability to bind to a specific IP when running the server on UDP with node['rsyslog']['bind']
+- Sync the comments in the rsyslog.conf file with the latest upstream rsyslog release
+- Change emerg to log to :omusrmsg:* vs. * on modern rsyslog releases to avoid deprecation warnings
 
+v.2.0.0 (2015-05-18)
+--------------------
+Note: This version includes several breaking changes for Ubuntu users. Be sure to take care when deploying these changes to production systems.
 
+- 49-relp.conf now properly uses the list of servers discovered in the client recipe
+- Fixed a typo that prevented file-input.conf from properly templating
+- Added allow_non_local attribute to allow non-local messages. This defaults to false, which preserves the previous functionality
+- The rsyslog directory permissions are now properly set using the user/group attributes instead of root/root
+- Properly drop permissions on Ubuntu systems to syslog/syslog.  Introduces 2 new attributes to control the user/group: priv_user and priv_group
+- Remove logging to /dev/xconsole in 50-default.conf on Ubuntu systems.  This is generally not something you'd want to do and produces error messages at startup.
+
+v.1.15.0 (2015-02-23)
+---------------------
+- Change minimum supported Fedora release to 20 to align with the Fedora product lifecycle
+- Add supports CentOS to metadata
+- Update Rubocop and Test Kitchen dependencies to the latest versions
+- Update Chefspec to 4.0
+- Fix CentOS 5 support in the Kitchen config
+- Fix rsyslog service notification in the file_input LWRP
+
+v.1.14.0 (2015-01-30)
+---------------------
+- Don't attempt to use journald on Amazon Linux since Amazon Linux doesn't use systemd
+- Fixed setting bad permissions on the working directory by using the rsyslog user/group variables.
+- Fixed bad variable in the 49-relp.conf template that prevented Chef converges from completing.
+- Removed the 'reload' action from the rsyslog service as newer rsyslog releases don't support reload.
+- Updated Chefspecs to remove deprecation warnings and added additional tests.
+- Removed node name from the comment block in the config files.
+- Added a new file_input LWRP for defining configs.
+- Added support for chef solo search cookbook.
+
+v1.13.0 (2014-11-25)
+--------------------
+- Rsyslog's working directory is now an attribute and is set to the appropriate directory on RHEL based distros
+- The working directory is now 0700 vs 0755 for additional security
+- Add the ActionQueueMaxDiskSpace directive with a default of 1GB to prevent out of disk events during large buffering
+- Updated RHEL / Fedora facilities to match those shipped by the distros
+- Updated modules to match those used by journald (systemd) on Fedora 19+ and CentOS 7
+- Added an attribute additional_directives to pass a hash of configs.  This is currently only being used to pass directives necessary for journald support on RHEL 7 / Fedora 19+
+- Added basic SUSE support
+- Fixed logic that prevented Ubuntu from properly dropping privileges in Ubuntu >= 11.04
+- Removed references to rsyslog v3 in the config template
+- Added a chefignore file
+- Updated Gemfile with newer releases of Test Kitchen, Rubocop, and Berkshelf
+- Added Fedora 20, Debian 6/7, CentOS 7, and Ubuntu 12.04/14.04 to the Test Kitchen config
+- Removed an attribute that was in the Readme twice
+- Updated Travis to Ruby 2.1.1 to better match Chef 12
+- Updated the Berksfile to point to Supermarket
+- Refactored the specs to be more dry
 
 v1.12.2 (2014-02-28)
 --------------------
